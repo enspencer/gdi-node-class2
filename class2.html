@@ -309,7 +309,6 @@ npm install --save mongoose && npm install --save body-parser
                 </code></pre>
                 <p>Then in your server.js file add:</p>
                 <pre><code>
-// var port = process.env.PORT || 9000;
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 mongoose.connect('mongodb://localhost/test');
@@ -319,7 +318,12 @@ app.use(bodyParser.urlencoded({
   extended: true
 }));
 app.use(bodyParser.json());
+                </code></pre>
+            </section>
 
+            <section>
+                <h3>Create a new route</h3>
+                <pre><code>
 app.post('/dinosaurs', function(req, res) {
   var dino = new Dinosaur();
   dino.name = req.body.name;
@@ -343,7 +347,7 @@ app.post('/dinosaurs', function(req, res) {
     "name": "Tracy Rex"
 }
                 </code></pre>
-                <p>Ask a TA for help sending JSON via Postman!</p>
+                <p>Ask a TA for help sending JSON via Postman! Create a few dinosaurs with different names.</p>
             </section>
 
             <section>
@@ -367,6 +371,17 @@ app.get('/dinosaurs', function(req, res) {
                     <li>Update a dino’s info</li>
                     <li>Delete a dino</li>
                 </ul>
+                <h4 style="margin-top:50px;">Example:</h4>
+                <pre><code>
+app.get('/dinosaurs/:id', function(req, res) {
+  Dinosaur.findById(req.params.id, function(err, dinos) {
+    if (err)
+      res.send(err);
+    res.json(dinos);
+  });
+});
+                </code></pre>
+                <p>Read the Mongoose docs for more methods: http://goo.gl/EwvBW</p>
             </section>
 
 			</div><!-- Close .slides -->
