@@ -11,7 +11,8 @@ To navigate through the slides use your arrow keys or click the arrows in the bo
 
 
 ## Agenda: Modular development & Express
-  - Intro to NPM, install Express, create Express server
+  - Intro to NPM, require, create Express server
   - HTTP methods in Express
-  - Development using Grunt
+  - Templating Engines
+  - MongoDB & Mongoose
   - Modular development workflow

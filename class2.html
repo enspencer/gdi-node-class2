@@ -79,7 +79,7 @@ npm install MODULE-NAME
                 </code></pre>
                 <p>You'll see the module's dependencies listed below. Try it:</p>
                 <pre><code>
-npm install underscore
+npm install grunt
                 </code></pre>
             </section>
 
@@ -141,7 +141,7 @@ npm install express
             </section>
 
             <section>
-                <h3>Let's Develop It</h3>
+                <h3>Express server</h3>
                 <p>Let's create a server using Express. In your server.js file type out the following code (don't copy-paste!):</p>
                 <pre><code>
 var express = require('express');
@@ -202,7 +202,7 @@ console.log('We are on port ' + port + '. Check out localhost:9000!');
 
             <section>
                 <h3>HTTP methods in Express</h3>
-                <p>Each of the 4 methods has an alias in Express:</p><br>
+                <p>Express has a function for each of the 4 methods:</p><br>
                 <ul style="width:500px;">
                     <li><b>GET</b> - app.get()</li>
                     <li><b>POST</b> - app.post()</li>
@@ -239,7 +239,8 @@ app.delete('/user', function(req, res) {
                 <p></p><br>
                 <p>Navigating to a page in your browser makes a GET request. To make a POST, PUT, or DELETE we can use <a href="http://curl.haxx.se/docs/manual.html">cURL</a> or <a href="https://www.getpostman.com/">Postman</a>.</p>
                 <p></p>
-                <h5 style="margin-top:50px;">Try sending a PUT request to your API and viewing the response.</h5>
+                <h5 style="margin-top:50px;">Install Postman for Chrome at getpostman.com.</h5>
+                <h5>Try sending a PUT request to your API and viewing the response.</h5>
             </section>
 
             <section>
@@ -382,6 +383,11 @@ app.get('/dinosaurs/:id', function(req, res) {
 });
                 </code></pre>
                 <p>Read the Mongoose docs for more methods: http://goo.gl/EwvBW</p>
+            </section>
+
+            <section>
+                <h3>Want more?</h3>
+                <p>Data comes back from Mongo as JSON. Modify one of your GET endpoints to render a Mustache template with a dinosaur object from the database.</p>
             </section>
 
 			</div><!-- Close .slides -->
