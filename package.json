@@ -1,0 +1,7 @@
+{
+	"name":"gdi-node-class2",
+	"main":"server.js",
+	"dependencies": {
+
+	}
+}

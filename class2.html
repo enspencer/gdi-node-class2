@@ -1,0 +1,315 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Class 2 ~ Server-side Development with Node.js ~ Girl Develop It</title>
+
+		<meta name="description" content="This is an introduction to node.js curriculum, developed by Emma for the Boston chapter.
+
+        The course is meant to be taught in 4 two-hour sections. Each of the slides and practice files are customizable according to the needs of a given class or audience.">
+		<meta name="author" content="Girl Develop It">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<link rel="stylesheet" href="reveal/css/reveal.css">
+		<link rel="stylesheet" href="reveal/css/theme/gdidefault.css" id="theme">
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- For syntax highlighting -->
+		<!-- light editor<link rel="stylesheet" href="lib/css/light.css">-->
+		<!-- dark editor--><link rel="stylesheet" href="reveal/lib/css/dark.css">
+
+		<!-- If use the PDF print sheet so students can print slides-->
+
+		<link rel="stylesheet" href="reveal/css/print/pdf.css" type="text/css" media="print">
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+		<!-- Any section element inside of this container is displayed as a slide -->
+		<div class="slides">
+        <!-- Opening slide -->
+            <section>
+                <img src="images/gdi_logo_badge.png" alt="GDI logo">
+                <h3>Server-side Development with Node.js</h3>
+                <h4>Class 2</h4>
+            </section>
+
+            <section>
+              <h3>Review</h3>
+              <div class="left-align">
+                  <ul>
+                    <li>What are the ways you can execute node code?</li>
+                    <li>What is the data type when you read file contents?</li>
+                  </ul>
+                  <h1></h1>
+                  <p>For today: Git clone the <a href="https://github.com/enspencer/gdi-node-class2">gdi-node-class2 repository</a></p>
+              </div>
+            </section>
+
+            <section>
+                <h3>What is NPM?</h3>
+                <img style="border:none;max-width:50%" src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Npm-logo.svg/1280px-Npm-logo.svg.png" />
+                <ul>
+                    <li>NPM stand for Node Package manager</li>
+                    <li>Node has some built-in core modules that we used last week</li>
+                    <li>NPM is a resource where anyone can publish their own node modules</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Find and install node modules</h3>
+                <p>Searchable at npmjs.com or on the command line</p>
+                <pre><code>
+cd gdi-node-class2
+npm search pdf
+                </code></pre>
+                <p>To install a module simply run</p>
+                <pre><code>
+npm install MODULE-NAME
+                </code></pre>
+                <p>You'll see the module's dependencies listed below. Try it:</p>
+                <pre><code>
+npm install underscore
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Package.json</h3>
+                <p class="left-align">In your project you can specify which node modules you need in a file named package.json. Add a dependency to the package.json file in your gdi-node-class2 directory:</p>
+                <pre><code>
+{
+    "name": "gdi-node-class2",
+    "main": "server.js",
+    "dependencies": {
+        "express": "~4.0.0"
+    }
+}
+                </code></pre>
+                <p>And then you can simply run</p>
+                <pre><code>
+npm install
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Using `require`</h3>
+                <p class="left-align">Once they're installed you can require modules from NPM in your files just like core modules:</p>
+                <pre><code>
+// core module
+var fs = require('fs');
+// installed from NPM
+var express = require('express');
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>How does `require` work?</h3>
+                <pre><code>
+var express = require('express');
+                </code></pre>
+                <ul>
+                    <li>First node will look if a file named express.js exists in the current folder</li>
+                    <li>If it can't find it, it looks for a node_modules folder</li>
+                    <li>If it can't find that, node will go up one folder and do the previous step again</li>
+                    <li>This pattern continues until the root folder of the filesystem, then node checks the globally installed modules</li>
+                    <li>Finally it will throw an exception if it still can't find the module</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>A visual explanation</h3>
+                <img style="background-color:white;max-width:80%" src="https://github.com/maxogden/art-of-node/raw/master/mod-diagram-01.png" />
+            </section>
+
+            <section>
+                <h3>Express.js</h3>
+                <p>Node isn't a web framework, but <a href="http://expressjs.com/">Express</a> is. It's a minimal framework for creating APIs.</p>
+                <pre><code>
+npm install express
+                </code></pre>
+                <p>After you install a module it will be saved in the node_modules folder in your application. Then it can be required like a core node module.</p>
+            </section>
+
+            <section>
+                <h3>Let's Develop It</h3>
+                <p>Let's create a server using Express. In your server.js file type out the following code (don't copy-paste!):</p>
+                <pre><code>
+var express = require('express');
+var app = express();
+
+var port = process.env.PORT || 9000;
+
+var router = express.Router();
+
+router.get('/', function(req, res) {
+    res.json({message: 'We made an API!'});
+});
+
+app.use('/', router);
+app.listen(port);
+console.log('We are on port ' + port + '. Check out localhost:9000!');
+				</code></pre>
+                <p>Now run your server:</p>
+                <pre><code>
+node server.js
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>What did we just do?</h3>
+                <pre><code>// require express
+var express = require('express');
+// define our app as an instance of express
+var app = express();
+// define which port to listen on
+var port = process.env.PORT || 9000;
+
+// Create a route!
+app.get('/', function(req, res) {
+    res.send({message: 'We made an API!'});
+});
+
+// Start the server
+app.listen(port);
+console.log('We are on port ' + port + '. Check out localhost:9000!');
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Restarting the server</h3>
+                <p>Change this line: </p>
+                <pre><code>
+app.use('/', router);
+                </code></pre>
+                <p>to: </p>
+                <pre><code>
+app.use('/api', router);
+                </code></pre>
+                <p>Now restart your server and refresh the page. What do you see?</p>
+            </section>
+
+            <section>
+                <h3>What's a router?</h3>
+                <p><a href="http://expressjs.com/guide/routing.html">Routing</a> refers to the definition of end points (URIs) to an application and how it responds to client requests.</p>
+            </section>
+
+            <section>
+                <h3>HTTP methods</h3>
+                <p>We used `app.get()` define our route. GET is 1 of 4 methods used to send and receive data from an API.</p>
+                <ul style="width:500px;">
+                    <li>GET - read 1 or many objects</li>
+                    <li>POST - create new data</li>
+                    <li>PUT - update existing data</li>
+                    <li>DELETE - delete 1 object</li>
+                </ul>
+                <br><br>
+                <h4>These 4 methods are also known as CRUD:</h4>
+                <p>Create Read Update Delete</p>
+            </section>
+
+            <section>
+                <h3>HTTP methods in Express</h3>
+                <p>Each of the 4 methods has an alias in Express:</p><br>
+                <ul style="width:500px;">
+                    <li><b>GET</b> - app.get()</li>
+                    <li><b>POST</b> - app.post()</li>
+                    <li><b>PUT</b> - app.put()</li>
+                    <li><b>DELETE</b> - app.delete()</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>back to server.js</h3>
+                <p>We can define more routes</p>
+                <pre><code>
+app.get('/', function(req, res) {
+    res.send({message: 'We made an API!'});
+});
+
+app.post('/', function(req, res) {
+    res.send('POST request');
+});
+
+app.put('/user', function(req, res) {
+    res.send('PUT request');
+});
+
+app.delete('/user', function(req, res) {
+    res.send('DELETE request');
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Interacting with routes</h3>
+                <p>How do we test a POST endpoint? How does the server know if '/user' is a PUT or a DELETE?</p>
+                <p></p><br>
+                <p>Navigating to a page in your browser makes a GET request. To make a POST, PUT, or DELETE we can use <a href="http://curl.haxx.se/docs/manual.html">cURL</a> or <a href="https://www.getpostman.com/">Postman</a>.</p>
+            </section>
+
+            <section>
+                <h3>Connecting your API and front end</h3>
+            </section>
+
+            <section>
+                <h3>Bonus</h3>
+            </section>
+
+            <section>
+                <h3>Want more?</h3>
+            </section>
+
+            <section>
+                <h3>Resources</h3>
+            </section>
+
+			</div><!-- Close .slides -->
+  		<footer>
+        <div class="copyright">
+          Server-Side Development in Node.js ~ Girl Develop It ~
+          <a rel="license" href="http://creativecommons.org/licenses/by-nc/3.0/deed.en_US"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-nc/3.0/80x15.png" /></a>
+        </div><!-- Close .copyright -->
+      </footer>
+    </div><!-- Close .reveal -->
+
+
+		<script src="reveal/lib/js/head.min.js"></script>
+		<script src="reveal/js/reveal.min.js"></script>
+
+		<script>
+
+			// Full list of configuration options available here:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+                touch: true,
+
+				theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+				transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
+
+				// Optional libraries used to extend on reveal.js
+				dependencies: [
+					{ src: 'reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'reveal/plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'reveal/plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+					{ src: 'reveal/plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
