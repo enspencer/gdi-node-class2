@@ -49,10 +49,11 @@
                   <ul>
                     <li>What are the ways you can execute node code?</li>
                     <li>What is the data type when you read file contents?</li>
+                    <li>Do you have any questions from last week?</li>
                   </ul>
                   <h1></h1>
-                  <p>For today: Git clone the <a href="https://github.com/enspencer/gdi-node-class2">gdi-node-class2 repository</a></p>
               </div>
+              <p>For today: Git clone the <a href="http://git.io/v42PI">gdi-node-class2 repository</a> at git.io/v42PI</p>
             </section>
 
             <section>
@@ -145,16 +146,12 @@ npm install express
                 <pre><code>
 var express = require('express');
 var app = express();
-
 var port = process.env.PORT || 9000;
 
-var router = express.Router();
-
-router.get('/', function(req, res) {
-    res.json({message: 'We made an API!'});
+app.get('/', function(req, res) {
+    res.send({message: 'We made an API!'});
 });
 
-app.use('/', router);
 app.listen(port);
 console.log('We are on port ' + port + '. Check out localhost:9000!');
 				</code></pre>
@@ -182,19 +179,6 @@ app.get('/', function(req, res) {
 app.listen(port);
 console.log('We are on port ' + port + '. Check out localhost:9000!');
                 </code></pre>
-            </section>
-
-            <section>
-                <h3>Restarting the server</h3>
-                <p>Change this line: </p>
-                <pre><code>
-app.use('/', router);
-                </code></pre>
-                <p>to: </p>
-                <pre><code>
-app.use('/api', router);
-                </code></pre>
-                <p>Now restart your server and refresh the page. What do you see?</p>
             </section>
 
             <section>
@@ -254,22 +238,135 @@ app.delete('/user', function(req, res) {
                 <p>How do we test a POST endpoint? How does the server know if '/user' is a PUT or a DELETE?</p>
                 <p></p><br>
                 <p>Navigating to a page in your browser makes a GET request. To make a POST, PUT, or DELETE we can use <a href="http://curl.haxx.se/docs/manual.html">cURL</a> or <a href="https://www.getpostman.com/">Postman</a>.</p>
+                <p></p>
+                <h5 style="margin-top:50px;">Try sending a PUT request to your API and viewing the response.</h5>
             </section>
 
             <section>
                 <h3>Connecting your API and front end</h3>
+                <p>Express has built in support for templating engines, which allows you to dynamically render data returned by an API. We're going to use <a href="https://github.com/janl/mustache.js/">Mustache.js</a>. To use it first install the dependency: </p>
+                <pre><code>
+npm install --save mustache-express
+                </code></pre>
             </section>
 
             <section>
-                <h3>Bonus</h3>
+                <h3>Using Mustache</h3>
+                <p>In server.js add these lines:</p>
+                <pre><code>
+// Require the node module
+var mustacheExpress = require('mustache-express');
+// Tell Express to use the mustache engine
+app.engine('mustache', mustacheExpress());
+app.set('view engine', 'mustache');
+// Tell Express what folder to look in for the views
+app.set('views', __dirname + '/views');
+                </code></pre>
+                <p>And update your GET endpoint:</p>
+                <pre><code>
+app.get('/', function(req, res) {
+  res.render('index', {
+    title: 'Hey',
+    message: 'Hello there!'
+  });
+});
+                </code></pre>
             </section>
 
             <section>
-                <h3>Want more?</h3>
+                <h3>What do templates give us?</h3>
+                <p>Template engines allow us to use the same HTML file to render any data. You can use the same index.mustache file to render your POST response:</p>
+                <pre><code>
+app.post('/', function(req, res) {
+  res.render('index', {
+    title: 'This is a POST',
+    message: 'Hello there!'
+  });
+});
+                </code></pre>
+                <p>And send a POST to localhost:9000 from Postman or cURL.</p>
             </section>
 
             <section>
-                <h3>Resources</h3>
+                <h3>Let's develop it</h3>
+                <p>Create another GET endpoint in server.js and another mustache file in the views/ folder and render the template with that endpoint.</p>
+            </section>
+
+            <section>
+                <h3>Mongo!</h3>
+                <p>Time to connect our endpoints to some data. If you don't have Mongo installed, let's do that now. If you do, read through the overview of Mongo.</p>
+                <ul>
+                    <li>Mongo tutorial: http://goo.gl/oQvBW6</li>
+                    <li>For Windows: https://goo.gl/dvi6uI</li>
+                    <li>For Mac: https://goo.gl/yyL0uK</li>
+                </ul>
+            </section>
+
+            <section>
+                <h3>Connect to Mongo</h3>
+                <pre><code>
+npm install --save mongoose && npm install --save body-parser
+                </code></pre>
+                <p>Then in your server.js file add:</p>
+                <pre><code>
+// var port = process.env.PORT || 9000;
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
+mongoose.connect('mongodb://localhost/test');
+var Dinosaur = require('./models/dinosaur');
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+app.post('/dinosaurs', function(req, res) {
+  var dino = new Dinosaur();
+  dino.name = req.body.name;
+  dino.save(function(err) {
+    if (err)
+      res.send(err);
+
+    res.json({
+      message: 'Dino created!'
+    });
+  });
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Let's create some dinos!</h3>
+                <p>Using Postman send a POST request with a JSON body that looks like this:</p>
+                <pre><code>
+{
+    "name": "Tracy Rex"
+}
+                </code></pre>
+                <p>Ask a TA for help sending JSON via Postman!</p>
+            </section>
+
+            <section>
+                <h3>Get a list of dinos</h3>
+                <pre><code>
+app.get('/dinosaurs', function(req, res) {
+  Dinosaur.find(function(err, dinos) {
+    if (err)
+      res.send(err);
+
+    res.json(dinos);
+  });
+});
+                </code></pre>
+            </section>
+
+            <section>
+                <h3>Let's do more!</h3>
+                <ul>
+                    <li>Get a single dino</li>
+                    <li>Update a dino’s info</li>
+                    <li>Delete a dino</li>
+                </ul>
             </section>
 
 			</div><!-- Close .slides -->
