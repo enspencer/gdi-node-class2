@@ -10,9 +10,8 @@ open class2.html
 To navigate through the slides use your arrow keys or click the arrows in the bottom right corner.
 
 
-## Agenda: Modular development & Express
+## Agenda: Express, Templates, and Mongo
   - Intro to NPM, require, create Express server
   - HTTP methods in Express
   - Templating Engines
   - MongoDB & Mongoose
-  - Modular development workflow
